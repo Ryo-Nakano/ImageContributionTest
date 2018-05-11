@@ -1,0 +1,55 @@
+<%= form_with(model: student, local: true) do |form| %>
+  <% if student.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(student.errors.count, "error") %> prohibited this student from being saved:</h2>
+
+      <ul>
+      <% student.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :student_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :age %>
+    <%= form.number_field :age, id: :student_age %>
+  </div>
+
+  <div class="field">
+    <%= form.label :height %>
+    <%= form.number_field :height, id: :student_height %>
+  </div>
+
+  <!-- 追加箇所 開始-->
+    <div class="field">
+      <% if @student.image? %>
+        <div class="thumbnail">
+        <%= image_tag @student.image.url %>
+        </div>
+      <% end %><br>
+      <%= form.label :image %><br>
+      <%= form.file_field :image %>
+      <%= form.hidden_field :image_cache %>
+    </div>
+    <div class="field">
+      <!-- 既存レコード(DBに保存されている)かつ、画像が存在する場合 -->
+      <% if @student.persisted? && @student.image? %>
+        <label>
+        <%= form.check_box :remove_image %>
+        画像を削除
+        </label>
+      <% end %>
+    </div>
+  <!-- 追加箇所 終了 -->
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+  
+<% end %>
